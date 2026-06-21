@@ -1,0 +1,29 @@
+# Robot Control System - Global Data Contract
+# 모든 에이전트는 코드 작성 시 이 규격을 준수해야 함
+
+version: "1.0.0"
+
+communication:
+  platform: "ROS 2 Humble"
+  qos_profile:
+    reliability: "RELIABLE"
+    durability: "TRANSIENT_LOCAL"
+  timestamp_required: true
+
+data_types:
+  control_command: "geometry_msgs/msg/TwistStamped"
+  robot_state: "sensor_msgs/msg/JointState"
+  ai_inference: "robot_control/msg/AIAction"
+
+safety_protocol:
+  priority_levels:
+    0: "EMERGENCY_STOP"
+    1: "HARDWARE_ROBOTICS_IK"
+    2: "AI_INFERENCE_PLANNING"
+    3: "LOGGING_UI"
+  min_safety_distance_mm: 100
+
+rules:
+  - "모든 메시지는 std_msgs/msg/Header의 stamp 필드를 포함해야 함."
+  - "Chief Reviewer 승인 없이는 실제 하드웨어로 명령을 전송하지 않음."
+  - "AI 모델은 시뮬레이션 환경에서 10,000회 이상 검증된 것만 배포 가능."
